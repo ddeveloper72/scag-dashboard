@@ -1,39 +1,15 @@
----
-import Header from "../components/Header.astro";
-import RoleButtons from "../components/RoleButtons.astro";
-import "../styles/globals.css";
----
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SCAG Dashboard</title>
-    <meta
-      name="description"
-      content="Role-aware Shared Care Access Gateway built with Astro, Tailwind CSS, and Microsoft Entra authentication."
-    />
+    <title>Redirecting | SCAG Dashboard</title>
+    <meta http-equiv="refresh" content="0; url=/dashboard/" />
+    <script>
+      window.location.replace("/dashboard/");
+    </script>
   </head>
   <body>
-    <main class="shell">
-      <Header />
-      <RoleButtons />
-
-      <section class="panel mt-8 rounded-[1.75rem] px-6 py-5">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand)]">Deployment note</p>
-            <h2 class="mt-2 text-xl font-semibold text-slate-900">Configure once, route cleanly</h2>
-            <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-muted)]">
-              Set Entra and destination values in the environment, publish the static site, and let the dashboard expose only the links appropriate for the signed-in role set.
-            </p>
-          </div>
-          <div class="rounded-2xl border border-[var(--line)] bg-[var(--surface-muted)] px-4 py-3 text-sm text-[var(--text-muted)]">
-            No secrets are stored in the repository.
-          </div>
-        </div>
-      </section>
-    </main>
+    <p>Redirecting to the dashboard...</p>
   </body>
 </html>

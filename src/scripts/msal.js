@@ -88,14 +88,30 @@ async function login() {
     await instance.loginRedirect(loginRequest);
 }
 
-function buildLogoutUrl() {
-    const logoutTarget = new URL("https://login.microsoftonline.com/common/oauth2/v2.0/logout");
-    logoutTarget.searchParams.set("post_logout_redirect_uri", dashboardUrl);
-    return logoutTarget.toString();
-}
+async function logout() {
+    const instance = getMsalInstance();
+    await initialize();
+    const account = getActiveAccount();
 
-function logout() {
-    window.location.href = buildLogoutUrl();
+    if (account) {
+        await instance.clearCache({ account });
+    }
+
+    instance.setActiveAccount(null);
+
+    if (typeof globalThis !== "undefined" && globalThis.location) {
+        const logoutParams = new URLSearchParams({
+            client_id: clientId,
+            post_logout_redirect_uri: dashboardUrl,
+        });
+
+        if (account?.username) {
+            logoutParams.set("logout_hint", account.username);
+        }
+
+        const logoutUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/logout?${logoutParams.toString()}`;
+        globalThis.location.replace(logoutUrl);
+    }
 }
 
 function getUserProfile(account = getActiveAccount()) {
@@ -123,7 +139,6 @@ async function acquireToken(scopes = []) {
 export function useAuth() {
     return {
         acquireToken,
-        buildLogoutUrl,
         getActiveAccount,
         getUserProfile,
         initialize,

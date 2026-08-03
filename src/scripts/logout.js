@@ -4,9 +4,9 @@ const logoutMessage = document.querySelector("#logout-message");
 const logoutButton = document.querySelector("#logout-button");
 const auth = useAuth();
 
-function beginLogout() {
+async function beginLogout() {
     try {
-        auth.logout();
+        await auth.logout();
     } catch (error) {
         console.error(error);
         logoutMessage.textContent = error instanceof Error ? error.message : "Unable to start sign-out.";

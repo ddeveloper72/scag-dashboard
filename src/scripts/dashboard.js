@@ -10,6 +10,7 @@ const launchSummary = document.querySelector("#launch-summary");
 const cards = Array.from(document.querySelectorAll("[data-launch-card]"));
 
 function setAnonymousState(message) {
+    document.body.removeAttribute("data-primary-role");
     authStatus.textContent = message;
     userName.textContent = "Not signed in";
     loginLink.classList.remove("hidden");
@@ -23,6 +24,13 @@ function setAnonymousState(message) {
 }
 
 function setAuthenticatedState(profile) {
+    const rolePriority = ["Admin", "HealthcareProvider", "Pharmacist", "Reports"];
+    const primaryRole = rolePriority.find((role) => profile.roles.includes(role));
+
+    if (primaryRole) {
+        document.body.dataset.primaryRole = primaryRole;
+    }
+
     const visibleCards = [];
 
     authStatus.textContent = "Authenticated with Microsoft Entra ID";
@@ -35,15 +43,20 @@ function setAuthenticatedState(profile) {
         const launchUrl = card.dataset.url ?? "";
         const hasRole = profile.roles.includes(requiredRole);
         const hasUrl = Boolean(launchUrl);
-        const button = card.querySelector("button");
+        const link = card.querySelector("a");
 
         card.classList.toggle("hidden", !hasRole || !hasUrl);
 
-        if (button) {
-            button.disabled = !hasRole || !hasUrl;
-            button.onclick = () => {
-                window.location.href = launchUrl;
-            };
+        if (link) {
+            if (!hasRole || !hasUrl) {
+                link.setAttribute("aria-disabled", "true");
+                link.setAttribute("tabindex", "-1");
+                link.removeAttribute("href");
+            } else {
+                link.removeAttribute("aria-disabled");
+                link.removeAttribute("tabindex");
+                link.setAttribute("href", launchUrl);
+            }
         }
 
         if (hasRole && hasUrl) {

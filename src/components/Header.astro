@@ -2,11 +2,14 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <div class="flex items-center gap-3">
-          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--brand-soft)] text-lg font-semibold text-[var(--brand)]">SC</div>
+          <div class="flex items-center gap-4">
+          <picture class="flex h-12 w-auto items-center">
+            <source media="(max-width: 639px)" srcset="/branding/myhealth-logo.svg" />
+            <img class="h-12 w-auto" src="/branding/myhealth-logo-horizontal.svg" alt="MyHealth@EU" />
+          </picture>
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-[var(--brand)]">Shared Care Access Gateway</p>
-            <p class="mt-1 text-sm text-[var(--text-muted)]">Secure launchpad for downstream clinical systems</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-[var(--brand)]">NCP Connect</p>
+            <p class="mt-1 text-sm text-[var(--text-muted)]">Role-aware access to Irish national care services</p>
           </div>
         </div>
       </div>
@@ -23,9 +26,9 @@
     <div class="grid gap-6 lg:grid-cols-[1.45fr_0.8fr] lg:items-start">
       <div class="space-y-4">
         <div>
-          <h1 class="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Simple, role-based access to shared care applications</h1>
+          <h1 class="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Your route into the National Contact Point</h1>
           <p class="mt-3 max-w-3xl text-base leading-7 text-[var(--text-muted)]">
-            Users authenticate with Microsoft Entra ID, the dashboard reads roles from the ID token, and only the systems relevant to that role set are exposed.
+            NCP Connect uses your Microsoft Entra profile to reveal the clinical and operational systems available to you.
           </p>
         </div>
 
