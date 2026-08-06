@@ -19,6 +19,35 @@ Use `http://localhost:4321/dashboard/` as the SPA redirect URI and logout return
 
 SCAG sign-out uses the Microsoft Entra common logout endpoint and returns to `PUBLIC_DASHBOARD_URL` after the identity session is ended.
 
+## Docker
+
+Astro embeds `PUBLIC_*` values into the browser bundle during the image build. Pass the values as build arguments, then run the generated static site with Nginx:
+
+```powershell
+docker build `
+	--build-arg PUBLIC_AZURE_CLIENT_ID=your-entra-app-client-id `
+	--build-arg PUBLIC_AZURE_TENANT_ID=your-entra-tenant-id `
+	--build-arg PUBLIC_DASHBOARD_URL=http://localhost:8080/dashboard/ `
+	--build-arg PUBLIC_EHEALTH_PORTAL_URL=https://example.org/ehealth-portal `
+	--build-arg PUBLIC_OPENNCP_PORTAL_URL=https://example.org/openncp-portal `
+	-t scag-dashboard .
+
+docker run --rm -p 8080:80 scag-dashboard
+```
+
+Then open `http://localhost:8080/dashboard/`. The values above are browser-visible configuration, not secrets; do not pass credentials or private keys as Docker build arguments.
+
+### Docker Compose
+
+Copy `.env.example` to `.env`, update the public configuration values, and start the container with:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
+```
+
+Open `http://localhost:8080/dashboard/`. Stop the container with `Ctrl+C`, or run `docker compose down` from another terminal.
+
 ## Environment variables
 
 - `PUBLIC_AZURE_CLIENT_ID`: Browser-exposed Microsoft Entra application client ID.
