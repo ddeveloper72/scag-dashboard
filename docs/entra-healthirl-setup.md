@@ -110,7 +110,9 @@ The deployment team separately supplies:
 
 ```dotenv
 PUBLIC_EHEALTH_PORTAL_URL=https://<approved-ehealth-destination>
+PUBLIC_EHEALTH_PORTAL_LOGIN_PATH="/<approved-ehealth-login-path>"
 PUBLIC_OPENNCP_PORTAL_URL=https://<approved-ncp-entry-point>
+PUBLIC_OPENNCP_PORTAL_LOGIN_PATH=/<approved-ncp-login-path>
 ```
 
 All `PUBLIC_` values are compiled into browser assets and are visible to users. They must not contain secrets, credentials, signed links or private tokens. A build is required after changing them.
@@ -123,9 +125,11 @@ The current local environment uses the following non-secret endpoint values:
 |---|---|---|
 | `PUBLIC_DASHBOARD_URL` | `http://localhost:4321/dashboard/` | SPA redirect URI and post-logout return URL |
 | `PUBLIC_EHEALTH_PORTAL_URL` | `http://localhost:8093/` | eHealth Portal base URL |
-| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/login?autologin=1` | OpenNCP launch target for Administration and Reports |
+| `PUBLIC_EHEALTH_PORTAL_LOGIN_PATH` | `/#/login?autologin=1&returnTo=%2Fspa%2Fcountries` | eHealth Portal silent-login path |
+| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/` | OpenNCP base URL |
+| `PUBLIC_OPENNCP_PORTAL_LOGIN_PATH` | `/login?autologin=1` | OpenNCP silent-login path |
 
-The effective eHealth launch URL is `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries`. The dashboard derives this silent-login route from the configured eHealth base URL. It also derives its sign-in and sign-out page links from `PUBLIC_DASHBOARD_URL`. The dashboard does not transfer an ID token or access token to either destination. Each downstream frontend must use the existing Entra browser session for its own OIDC sign-in.
+The effective launch URLs are `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries` for eHealth and `http://localhost:8098/login?autologin=1` for OpenNCP. The dashboard composes each URL from its base URL and configured login path. It also derives its sign-in and sign-out page links from `PUBLIC_DASHBOARD_URL`. The dashboard does not transfer an ID token or access token to either destination. Each downstream frontend must use the existing Entra browser session for its own OIDC sign-in.
 
 ## 7. Acceptance test
 

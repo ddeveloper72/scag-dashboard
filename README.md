@@ -27,9 +27,11 @@ The current local `.env` configures these browser-visible endpoints:
 |---|---|---|
 | `PUBLIC_DASHBOARD_URL` | `http://localhost:4321/dashboard/` | Dashboard redirect and logout return URL |
 | `PUBLIC_EHEALTH_PORTAL_URL` | `http://localhost:8093/` | eHealth Portal base URL |
-| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/login?autologin=1` | OpenNCP Administration and Reports launch target |
+| `PUBLIC_EHEALTH_PORTAL_LOGIN_PATH` | `/#/login?autologin=1&returnTo=%2Fspa%2Fcountries` | eHealth Portal silent-login path |
+| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/` | OpenNCP base URL |
+| `PUBLIC_OPENNCP_PORTAL_LOGIN_PATH` | `/login?autologin=1` | OpenNCP silent-login path |
 
-The effective eHealth launch URL is `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries`; the dashboard adds the silent-login route and return path to the configured base URL. The Entra client and tenant identifiers remain environment-managed and are not duplicated in this guide. All `PUBLIC_` values are compiled into the static browser bundle and are not secrets.
+The effective launch URLs are `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries` for eHealth and `http://localhost:8098/login?autologin=1` for OpenNCP. The Entra client and tenant identifiers remain environment-managed and are not duplicated in this guide. All `PUBLIC_` values are compiled into the static browser bundle and are not secrets.
 
 ## Sign-in and handoff behavior
 
@@ -47,7 +49,9 @@ docker build `
 	--build-arg PUBLIC_AZURE_TENANT_ID=your-entra-tenant-id `
 	--build-arg PUBLIC_DASHBOARD_URL=http://localhost:4321/dashboard/ `
 	--build-arg PUBLIC_EHEALTH_PORTAL_URL=http://localhost:8093/ `
-	--build-arg PUBLIC_OPENNCP_PORTAL_URL=http://localhost:8098/login?autologin=1 `
+	--build-arg PUBLIC_EHEALTH_PORTAL_LOGIN_PATH="/#/login?autologin=1&returnTo=%2Fspa%2Fcountries" `
+	--build-arg PUBLIC_OPENNCP_PORTAL_URL=http://localhost:8098/ `
+	--build-arg PUBLIC_OPENNCP_PORTAL_LOGIN_PATH=/login?autologin=1 `
 	-t scag-dashboard .
 
 docker run --rm -p 4321:80 scag-dashboard
@@ -66,8 +70,10 @@ Stop the container with `Ctrl+C`, or run `docker compose down` from another term
 - `PUBLIC_AZURE_CLIENT_ID`: Browser-exposed Microsoft Entra application client ID.
 - `PUBLIC_AZURE_TENANT_ID`: Browser-exposed tenant ID for the Entra directory.
 - `PUBLIC_DASHBOARD_URL`: Browser-exposed dashboard URL, also used as the logout return target.
-- `PUBLIC_EHEALTH_PORTAL_URL`: Browser-exposed destination for the healthcare provider and pharmacist launch buttons.
-- `PUBLIC_OPENNCP_PORTAL_URL`: Browser-exposed shared OpenNCP auto-login URL for Admin and Reports users.
+- `PUBLIC_EHEALTH_PORTAL_URL`: Browser-exposed eHealth Portal base URL.
+- `PUBLIC_EHEALTH_PORTAL_LOGIN_PATH`: Browser-exposed eHealth Portal login path, including its auto-login and return parameters.
+- `PUBLIC_OPENNCP_PORTAL_URL`: Browser-exposed OpenNCP base URL.
+- `PUBLIC_OPENNCP_PORTAL_LOGIN_PATH`: Browser-exposed OpenNCP login path, including its auto-login parameters.
 
 ## Role mapping
 

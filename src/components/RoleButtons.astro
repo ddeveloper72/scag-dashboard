@@ -1,6 +1,24 @@
 ---
-const openNcpEntryUrl = import.meta.env.PUBLIC_OPENNCP_PORTAL_URL ?? "";
-const eHealthPortalUrl = `${import.meta.env.PUBLIC_EHEALTH_PORTAL_URL ?? ""}#/login?autologin=1&returnTo=%2Fspa%2Fcountries`;
+const eHealthPortalUrl = buildPortalUrl(
+  import.meta.env.PUBLIC_EHEALTH_PORTAL_URL,
+  import.meta.env.PUBLIC_EHEALTH_PORTAL_LOGIN_PATH,
+);
+const openNcpEntryUrl = buildPortalUrl(
+  import.meta.env.PUBLIC_OPENNCP_PORTAL_URL,
+  import.meta.env.PUBLIC_OPENNCP_PORTAL_LOGIN_PATH,
+);
+
+function buildPortalUrl(baseUrl = "", loginPath = "") {
+  if (!baseUrl || !loginPath) {
+    return "";
+  }
+
+  try {
+    return new URL(loginPath, baseUrl).toString();
+  } catch {
+    return "";
+  }
+}
 
 const launchTargets = [
   {

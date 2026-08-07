@@ -10,11 +10,14 @@ NCP Connect does **not** send its ID token or access token to that URL. The NCP 
 
 ## Current local launch endpoint
 
-The current local dashboard environment configures `PUBLIC_OPENNCP_PORTAL_URL` as:
+The current local dashboard environment configures the OpenNCP endpoint as:
 
-`http://localhost:8098/login?autologin=1`
+| Variable | Value |
+|---|---|
+| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/` |
+| `PUBLIC_OPENNCP_PORTAL_LOGIN_PATH` | `/login?autologin=1` |
 
-The `Admin` and `Reports` cards both launch this endpoint. The dashboard keeps its own local MSAL account cache and does not append or transfer a token. The OpenNCP frontend remains responsible for its own OIDC callback, local session, authorization, and logout behavior.
+The `Admin` and `Reports` cards both launch the composed endpoint `http://localhost:8098/login?autologin=1`. The dashboard keeps its own local MSAL account cache and does not append or transfer a token. The OpenNCP frontend remains responsible for its own OIDC callback, local session, authorization, and logout behavior.
 
 ## Required integration pattern
 
