@@ -3,6 +3,7 @@ import { PublicClientApplication } from "@azure/msal-browser";
 const clientId = import.meta.env.PUBLIC_AZURE_CLIENT_ID ?? "";
 const tenantId = import.meta.env.PUBLIC_AZURE_TENANT_ID ?? "common";
 const dashboardUrl = import.meta.env.PUBLIC_DASHBOARD_URL ?? "/";
+const logoutUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/logout?post_logout_redirect_uri=${encodeURIComponent(dashboardUrl)}`;
 
 const msalConfig = {
     auth: {
@@ -11,15 +12,13 @@ const msalConfig = {
         redirectUri: dashboardUrl,
     },
     cache: {
-        cacheLocation: "sessionStorage",
+        cacheLocation: "localStorage",
         storeAuthStateInCookie: false,
     },
 };
 
 const loginRequest = {
     scopes: ["openid", "profile"],
-    // Force account picker to reduce sticky SSO behavior across browser profiles.
-    prompt: "select_account",
 };
 
 let msalInstance;

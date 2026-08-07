@@ -150,6 +150,6 @@ Record the following in the project configuration register:
 
 ## Current repository validation
 
-As of 6 August 2026, the repository contains the required tenant ID/client ID configuration points, tenant-specific authority, MSAL redirect handling, ID-token role parsing, session-scoped cache and tenant logout flow. The local values are syntactically valid and the production build succeeds.
+As of 6 August 2026, the repository contains the required tenant ID/client ID configuration points, tenant-specific authority, MSAL redirect handling, ID-token role parsing, browser-local cache and tenant logout flow. The local values are syntactically valid and the production build succeeds.
 
 Repository inspection cannot prove that the HEALTHIRL tenant objects, production URLs, group assignments or Conditional Access policies exist. Entra setup is operationally complete only when the acceptance test and handover record above have been completed by the HEALTHIRL team.
