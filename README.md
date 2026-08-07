@@ -17,7 +17,25 @@ Static Astro dashboard for the Shared Care Access Gateway. The app authenticates
 
 Use `http://localhost:4321/dashboard/` as the SPA redirect URI and logout return URL for the SCAG Dashboard app registration.
 
-SCAG sign-out uses the Microsoft Entra common logout endpoint and returns to `PUBLIC_DASHBOARD_URL` after the identity session is ended.
+SCAG sign-out uses the configured tenant's Microsoft Entra logout endpoint and returns to `PUBLIC_DASHBOARD_URL` after the identity session is ended.
+
+## Current local endpoints
+
+The current local `.env` configures these browser-visible endpoints:
+
+| Variable | Current value | Use |
+|---|---|---|
+| `PUBLIC_DASHBOARD_URL` | `http://localhost:4321/dashboard/` | Dashboard redirect and logout return URL |
+| `PUBLIC_EHEALTH_PORTAL_URL` | `http://localhost:8093/` | eHealth Portal base URL |
+| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/login?autologin=1` | OpenNCP Administration and Reports launch target |
+
+The effective eHealth launch URL is `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries`; the dashboard adds the silent-login route and return path to the configured base URL. The Entra client and tenant identifiers remain environment-managed and are not duplicated in this guide. All `PUBLIC_` values are compiled into the static browser bundle and are not secrets.
+
+## Sign-in and handoff behavior
+
+The dashboard uses MSAL Browser with the configured tenant, does not force an account picker, and keeps its account cache in browser-local storage. This allows the eHealth Portal and OpenNCP frontends to start their own OIDC sign-in against the existing Entra browser session without receiving a dashboard token. Each downstream frontend owns its own session and authorization.
+
+The dashboard login page returns an already authenticated user to the dashboard instead of starting a second redirect. Sign-in and sign-out links are derived from `PUBLIC_DASHBOARD_URL`, so they continue to work when the dashboard is deployed below a different path.
 
 ## Docker
 
@@ -27,26 +45,21 @@ Astro embeds `PUBLIC_*` values into the browser bundle during the image build. P
 docker build `
 	--build-arg PUBLIC_AZURE_CLIENT_ID=your-entra-app-client-id `
 	--build-arg PUBLIC_AZURE_TENANT_ID=your-entra-tenant-id `
-	--build-arg PUBLIC_DASHBOARD_URL=http://localhost:8080/dashboard/ `
-	--build-arg PUBLIC_EHEALTH_PORTAL_URL=https://example.org/ehealth-portal `
-	--build-arg PUBLIC_OPENNCP_PORTAL_URL=https://example.org/openncp-portal `
+	--build-arg PUBLIC_DASHBOARD_URL=http://localhost:4321/dashboard/ `
+	--build-arg PUBLIC_EHEALTH_PORTAL_URL=http://localhost:8093/ `
+	--build-arg PUBLIC_OPENNCP_PORTAL_URL=http://localhost:8098/login?autologin=1 `
 	-t scag-dashboard .
 
-docker run --rm -p 8080:80 scag-dashboard
+docker run --rm -p 4321:80 scag-dashboard
 ```
 
-Then open `http://localhost:8080/dashboard/`. The values above are browser-visible configuration, not secrets; do not pass credentials or private keys as Docker build arguments.
-
-### Docker Compose
-
-Copy `.env.example` to `.env`, update the public configuration values, and start the container with:
+Then open `http://localhost:4321/dashboard/`. Docker Compose reads the same values from `.env` and exposes the Nginx container on port `4321`:
 
 ```powershell
-Copy-Item .env.example .env
 docker compose up --build
 ```
 
-Open `http://localhost:8080/dashboard/`. Stop the container with `Ctrl+C`, or run `docker compose down` from another terminal.
+Stop the container with `Ctrl+C`, or run `docker compose down` from another terminal.
 
 ## Environment variables
 

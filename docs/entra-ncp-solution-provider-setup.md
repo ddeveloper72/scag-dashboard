@@ -8,6 +8,14 @@ NCP Connect authenticates the user with the HEALTHIRL Microsoft Entra tenant and
 
 NCP Connect does **not** send its ID token or access token to that URL. The NCP application must initiate and complete its own standards-based OpenID Connect (OIDC) sign-in and enforce authorization on the server. Because the user already has an Entra browser session, this second sign-in should normally complete without another credential prompt, subject to Conditional Access.
 
+## Current local launch endpoint
+
+The current local dashboard environment configures `PUBLIC_OPENNCP_PORTAL_URL` as:
+
+`http://localhost:8098/login?autologin=1`
+
+The `Admin` and `Reports` cards both launch this endpoint. The dashboard keeps its own local MSAL account cache and does not append or transfer a token. The OpenNCP frontend remains responsible for its own OIDC callback, local session, authorization, and logout behavior.
+
 ## Required integration pattern
 
 Use:

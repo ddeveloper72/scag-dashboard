@@ -99,16 +99,6 @@ async function logout() {
     instance.setActiveAccount(null);
 
     if (typeof globalThis !== "undefined" && globalThis.location) {
-        const logoutParams = new URLSearchParams({
-            client_id: clientId,
-            post_logout_redirect_uri: dashboardUrl,
-        });
-
-        if (account?.username) {
-            logoutParams.set("logout_hint", account.username);
-        }
-
-        const logoutUrl = `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/logout?${logoutParams.toString()}`;
         globalThis.location.replace(logoutUrl);
     }
 }

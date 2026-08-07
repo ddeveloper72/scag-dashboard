@@ -23,7 +23,10 @@ async function bootstrapLoginPage() {
 
         if (account) {
             window.location.href = "/";
+            return;
         }
+
+        await beginLogin();
     } catch (error) {
         console.error(error);
         setMessage(error instanceof Error ? error.message : "Unable to initialize sign-in.");

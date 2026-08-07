@@ -115,6 +115,18 @@ PUBLIC_OPENNCP_PORTAL_URL=https://<approved-ncp-entry-point>
 
 All `PUBLIC_` values are compiled into browser assets and are visible to users. They must not contain secrets, credentials, signed links or private tokens. A build is required after changing them.
 
+### Current local endpoint record
+
+The current local environment uses the following non-secret endpoint values:
+
+| Variable | Value | Purpose |
+|---|---|---|
+| `PUBLIC_DASHBOARD_URL` | `http://localhost:4321/dashboard/` | SPA redirect URI and post-logout return URL |
+| `PUBLIC_EHEALTH_PORTAL_URL` | `http://localhost:8093/` | eHealth Portal base URL |
+| `PUBLIC_OPENNCP_PORTAL_URL` | `http://localhost:8098/login?autologin=1` | OpenNCP launch target for Administration and Reports |
+
+The effective eHealth launch URL is `http://localhost:8093/#/login?autologin=1&returnTo=%2Fspa%2Fcountries`. The dashboard derives this silent-login route from the configured eHealth base URL. It also derives its sign-in and sign-out page links from `PUBLIC_DASHBOARD_URL`. The dashboard does not transfer an ID token or access token to either destination. Each downstream frontend must use the existing Entra browser session for its own OIDC sign-in.
+
 ## 7. Acceptance test
 
 Complete this test in each environment:
@@ -125,7 +137,7 @@ Complete this test in each environment:
 4. Test one user or group for each role and confirm the ID token contains the exact role value.
 5. Confirm only the expected launch cards are displayed.
 6. Test a multi-role user.
-7. Select **Sign out**, confirm the Entra session is ended as intended, and confirm return to the exact dashboard URL.
+7. Select **Sign out**, confirm the configured tenant logout flow ends the Entra session as intended, and confirm return to the exact dashboard URL.
 8. Confirm Conditional Access and audit/sign-in logs show the expected application.
 9. Confirm each downstream destination performs its own authentication and authorization.
 
