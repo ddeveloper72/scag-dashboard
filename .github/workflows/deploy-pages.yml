@@ -1,0 +1,54 @@
+name: Deploy Astro site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
+        env:
+          PUBLIC_AZURE_CLIENT_ID: ${{ vars.PUBLIC_AZURE_CLIENT_ID }}
+          PUBLIC_AZURE_TENANT_ID: ${{ vars.PUBLIC_AZURE_TENANT_ID }}
+          PUBLIC_DASHBOARD_URL: ${{ vars.PUBLIC_DASHBOARD_URL }}
+          PUBLIC_EHEALTH_PORTAL_URL: ${{ vars.PUBLIC_EHEALTH_PORTAL_URL }}
+          PUBLIC_EHEALTH_PORTAL_LOGIN_PATH: ${{ vars.PUBLIC_EHEALTH_PORTAL_LOGIN_PATH }}
+          PUBLIC_OPENNCP_PORTAL_URL: ${{ vars.PUBLIC_OPENNCP_PORTAL_URL }}
+          PUBLIC_OPENNCP_PORTAL_LOGIN_PATH: ${{ vars.PUBLIC_OPENNCP_PORTAL_LOGIN_PATH }}
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
