@@ -30,6 +30,32 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate production configuration
+        env:
+          PUBLIC_AZURE_CLIENT_ID: ${{ vars.PUBLIC_AZURE_CLIENT_ID }}
+          PUBLIC_AZURE_TENANT_ID: ${{ vars.PUBLIC_AZURE_TENANT_ID }}
+          PUBLIC_DASHBOARD_URL: ${{ vars.PUBLIC_DASHBOARD_URL }}
+          PUBLIC_EHEALTH_PORTAL_URL: ${{ vars.PUBLIC_EHEALTH_PORTAL_URL }}
+          PUBLIC_EHEALTH_PORTAL_LOGIN_PATH: ${{ vars.PUBLIC_EHEALTH_PORTAL_LOGIN_PATH }}
+          PUBLIC_OPENNCP_PORTAL_URL: ${{ vars.PUBLIC_OPENNCP_PORTAL_URL }}
+          PUBLIC_OPENNCP_PORTAL_LOGIN_PATH: ${{ vars.PUBLIC_OPENNCP_PORTAL_LOGIN_PATH }}
+        run: |
+          required_vars=(
+            PUBLIC_AZURE_CLIENT_ID
+            PUBLIC_AZURE_TENANT_ID
+            PUBLIC_DASHBOARD_URL
+            PUBLIC_EHEALTH_PORTAL_URL
+            PUBLIC_EHEALTH_PORTAL_LOGIN_PATH
+            PUBLIC_OPENNCP_PORTAL_URL
+            PUBLIC_OPENNCP_PORTAL_LOGIN_PATH
+          )
+          for variable_name in "${required_vars[@]}"; do
+            if [ -z "${!variable_name}" ]; then
+              echo "Missing GitHub Actions repository variable: ${variable_name}" >&2
+              exit 1
+            fi
+          done
+
       - name: Build Astro site
         run: npm run build
         env:

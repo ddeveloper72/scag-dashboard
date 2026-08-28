@@ -1,7 +1,11 @@
 ---
 const dashboardUrl = import.meta.env.PUBLIC_DASHBOARD_URL ?? "/dashboard/";
-const loginUrl = new URL("../login/", dashboardUrl).toString();
-const logoutUrl = new URL("../logout/", dashboardUrl).toString();
+const loginUrl = dashboardUrl.startsWith("http")
+  ? new URL("../login/", dashboardUrl).toString()
+  : "/login/";
+const logoutUrl = dashboardUrl.startsWith("http")
+  ? new URL("../logout/", dashboardUrl).toString()
+  : "/logout/";
 ---
 
 <header class="panel rounded-[1.75rem] px-6 py-6">
