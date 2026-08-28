@@ -1,4 +1,9 @@
-# SCAG Dashboard
+# Shared Care Access Gateway (NCP-Connect)
+
+[![Deployment status](https://img.shields.io/github/deployments/ddeveloper72/scag-dashboard/github-pages?label=deployment&logo=github)](https://github.com/ddeveloper72/scag-dashboard/deployments)
+[![Build and run status](https://github.com/ddeveloper72/scag-dashboard/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/ddeveloper72/scag-dashboard/actions/workflows/deploy-pages.yml)
+
+Live site: [Shared Care Access Gateway](https://ncp-connect.ddeveloper72.dev/dashboard/)
 
 Static Astro dashboard for the Shared Care Access Gateway. The app authenticates users with Microsoft Entra ID through MSAL Browser, reads app roles from the ID token, and renders launch buttons only for the downstream systems each user can access.
 
